@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Nav from "./components/nav";
+import MyProjects from "./pages/MyProjects";
+import "./App.css";
+import Preloader from "./components/Preloader";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-function App() {
+const App = () => {
+  const [showPreloader, setShowPreloader] = useState(true);
+  const hidePreloader = () => {
+    setShowPreloader(false);
+  };
+  useEffect(() => {
+    AOS.init({
+      once: true,
+      disable: "phone",
+      easing: "ease-out-cubic",
+    });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="gradient">
+      <Router>
+        <Nav />
+        {showPreloader && <Preloader hidePreloader={hidePreloader} />}
+        <Routes className="gradient">
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/projects" element={<MyProjects />} />
+        </Routes>
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
